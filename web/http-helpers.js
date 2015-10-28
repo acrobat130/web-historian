@@ -38,6 +38,7 @@ exports.sendResponse = function(req, res, statusCode){
       exports.headers['Content-Type'] = "text/css";
       res.writeHead(statusCode, exports.headers);
       res.end(css); 
+      exports.headers['Content-Type'] = "text/html";
     })
   }
 }
