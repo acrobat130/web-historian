@@ -55,8 +55,10 @@ exports.sendResponse = function(req, res, statusCode){
       exports.headers['Content-Type'] = "text/html";
     })
   } 
+  else if () {
+    // else if (archivedSitesArray.indexOf(req.url.substr(1)) !== -1){
+    console.log('arglebargle?-------------------------------- ',req.url)
    else if (archive.paths.archivedSites + req.url) {
-    // console.log('inside-------------------------------- ')
     var site = archive.paths.archivedSites + req.url;
     // exports.headers['Content-Type'] = "text/plain";
     fs.readFile(site, function(error, html) {
@@ -66,14 +68,12 @@ exports.sendResponse = function(req, res, statusCode){
       res.writeHead(statusCode, exports.headers);
       res.end(html);
     })   
+  } else  {
+    statusCode = 404;
+    res.writeHead(statusCode, exports.headers);
+      // console.log("404??????????----------------", res);
+    res.end('page not found');
   }
-
-  // else {
-  //   statusCode = 404;
-  //   res.writeHead(statusCode, exports.headers);
-  //     // console.log("res----------------", res);
-  //   res.end();
-  // }
 
 
 
