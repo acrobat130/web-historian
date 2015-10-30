@@ -10,14 +10,53 @@ exports.headers = headers = {
   'Content-Type': "text/html"
 };
 
+// asset refers to specific file path, called in request-handler.js
 exports.serveAssets = function(res, asset, callback) {
-  // Write some code here that helps serve up your static files!
-  // (Static files are things like html (yours or archived from others...),
-  // css, or anything that doesn't change often.)
+  var encoding = {encoding: 'utf8'};
+  // check in public
+  fs.readFile(archive.paths.siteAssets + asset, encoding, function(error, file){
+    // if not in public
+    if (error) {
+      // check in archive
+      fs.readFile(archive.paths.archivedSites + asset, encoding, function(error, file) {
+      // console.log("archive.paths.siteAssets + asset---------------", archive.paths.siteAssets + asset)
+        if (error) {
+          // if not in archive
+          exports.sendResponse(res, "not found", 404);
+        } else {
+          // is in archive
+          exports.sendResponse(res, file);
+        }
+      })
+    } else {
+      // is in archive
+      exports.sendResponse(res, file);
+      console.log("file--------------", file)
+    }
+  })
 };
+
 
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
 
 // As you progress, keep thinking about what helper functions you can put here!
+
+exports.sendResponse = function(res, obj, status) {
+  status = status || 200;
+  res.writeHead(status, headers);
+  // console.log("obj--------------------", obj)
+  res.end(obj);
+}
+
+// for POST
+exports.collectData = function(req, callback) {
+  var data = '';
+  req.on('data', function(chunk){
+    data += chunk;
+  });
+  req.on('end', function(){
+    callback(data);
+  })
+}
