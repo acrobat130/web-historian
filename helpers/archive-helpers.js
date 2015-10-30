@@ -36,14 +36,39 @@ exports.readListOfUrls = function(callback){
   })
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url, callback){
+  var inList = false;
+  exports.readListOfUrls(function(sites){
+    inList = _.contains(sites, url)
+  })
+    callback(inList);
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url, callback){
+  
 };
 
-exports.isUrlArchived = function(){
+exports.isUrlArchived = function(url, callback){
+  var encoding = {encoding: 'utf8'};
+  var isArchived = false;
+  fs.readFile(exports.paths.archivedSites + url, encoding, function(error, file) {
+      if (error) {
+        // something
+      } else {
+        isArchived = true;
+        callback(isArchived);
+      }
+  })
 };
 
 exports.downloadUrls = function(){
 };
+
+
+
+
+
+
+
+
+

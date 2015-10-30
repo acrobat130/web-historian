@@ -19,7 +19,6 @@ exports.serveAssets = function(res, asset, callback) {
     if (error) {
       // check in archive
       fs.readFile(archive.paths.archivedSites + asset, encoding, function(error, file) {
-      // console.log("archive.paths.siteAssets + asset---------------", archive.paths.siteAssets + asset)
         if (error) {
           // if not in archive
           exports.sendResponse(res, "not found", 404);
@@ -31,7 +30,6 @@ exports.serveAssets = function(res, asset, callback) {
     } else {
       // is in archive
       exports.sendResponse(res, file);
-      console.log("file--------------", file)
     }
   })
 };
@@ -46,7 +44,6 @@ exports.serveAssets = function(res, asset, callback) {
 exports.sendResponse = function(res, obj, status) {
   status = status || 200;
   res.writeHead(status, headers);
-  // console.log("obj--------------------", obj)
   res.end(obj);
 }
 
@@ -60,3 +57,11 @@ exports.collectData = function(req, callback) {
     callback(data);
   })
 }
+
+
+
+
+
+
+
+

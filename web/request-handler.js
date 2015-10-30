@@ -13,6 +13,37 @@ var actions = {
     // res.end(archive.paths.list);
   },
   'POST': function(req,res){
+    var parts = urlParser.parse(req.url);
+    var urlPath = parts.pathname === '/' ? '/index.html' : parts.pathname;
+    var loadingUrl = archive.paths.siteAssets + '/loading.html';
+    
+    httpHelpers.collectData(req, function(data){
+      // is request in sites.txt?
+      if (archive.isUrlInList(parts.pathname, function(inList){
+        return inList;
+        })) {
+          // if yes, check if it's archived
+          if (archive.isUrlArchived()) {
+            // if yes, display page
+            httpHelpers.serveAssets(res, urlPath)
+          } else {
+            // if not, display loading page
+            httpHelpers.serveAssets(res, loadingUrl);
+          }
+        }
+      } else {
+      // if not in sites.txt, append to sites.txt  
+        archive.addUrlToList(urlPath, function(){
+        // display loading page
+          httpHelpers.serveAssets(res, loadingUrl)
+        // downloadUrl/archive
+
+        })
+        
+      }
+        
+        // exports.addUrlToList(req.url)
+    })
 
   }
 };
